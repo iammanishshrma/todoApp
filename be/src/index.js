@@ -17,10 +17,12 @@ connectDB()
             throw err;
         });
 
-        app.listen(port, () => {
-            console.log(`Server is running at port : ${port}`);
-        });
+        // app.listen(port, () => {
+        //     console.log(`Server is running at port : ${port}`);
+        // });
     })
     .catch((err) => {
         console.log("MONGO db connection failed!!! ", err);
     });
+
+export default app;
