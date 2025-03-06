@@ -27,9 +27,11 @@ app.use(express.static("public"));
 
 //Routes import
 import userRouter from "./routes/user.routes.js";
+import todoRouter from "./routes/todo.routes.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/todos", todoRouter);
 app.use("/api/v1/health", (_, res) => {
     res.status(200).json(
         new ApiResponse(200, null, "Server is up and running")
