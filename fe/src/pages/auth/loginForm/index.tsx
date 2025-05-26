@@ -16,7 +16,7 @@ import { login } from "@/utils/api/auth/login";
 import { errorToast } from "@/utils/toasts";
 
 const loginSchema = z.object({
-    email: z.string().email("Invalid email address"),
+    userId: z.string().min(1, "Username/Email is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -30,10 +30,14 @@ const LoginForm = ({ onViewChange }: LoginFormProps) => {
     });
     const { mutate: loginMutate } = useMutation({
         mutationFn: async (data: z.infer<typeof loginSchema>) => {
-            return login(data.email, data.password);
+            const isUsername = !data.userId.includes("@");
+            const payload = isUsername
+                ? { username: data.userId, password: data.password }
+                : { email: data.userId, password: data.password };
+            return login(payload);
         },
-        onSuccess: () => {
-            console.log("Login successful");
+        onSuccess: (data) => {
+            localStorage.setItem("user", JSON.stringify(data));
         },
         onError: (error: any) => {
             console.log("Login failed:", error.response.data.message);
@@ -41,7 +45,6 @@ const LoginForm = ({ onViewChange }: LoginFormProps) => {
         },
     });
     const submitHandler = (data: z.infer<typeof loginSchema>) => {
-        console.log("Form submitted with data:", data);
         loginMutate(data);
     };
     return (
@@ -59,13 +62,13 @@ const LoginForm = ({ onViewChange }: LoginFormProps) => {
                     <form onSubmit={handleSubmit(submitHandler)}>
                         <div className="mb-4">
                             <Input
-                                {...register("email")}
-                                type="email"
-                                placeholder="Email"
+                                {...register("userId")}
+                                type="text"
+                                placeholder="Username or Email"
                             />
-                            {errors.email && (
+                            {errors.userId && (
                                 <p className="text-red-500 text-sm mt-1">
-                                    {errors.email.message}
+                                    {errors.userId.message}
                                 </p>
                             )}
                         </div>

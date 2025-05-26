@@ -1,10 +1,9 @@
 import apiInstance from "../..";
 import ENDPOINTS from "../../endpoints";
 
-export const login = async (email: string, password: string) => {
-    const response = await apiInstance.post(ENDPOINTS.LOGIN, {
-        email,
-        password,
-    });
-    return response.data;
+export const login = async (
+    payload: LoginEmailPayload | LoginUsernamePayload
+): Promise<LoginResponse> => {
+    const response = await apiInstance.post(ENDPOINTS.LOGIN, payload);
+    return response.data.data;
 };
