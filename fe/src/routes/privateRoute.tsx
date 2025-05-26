@@ -5,7 +5,7 @@ function PrivateRoute(props: PrivateRouteProps) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     if (!isAuthenticated) {
-        return <Navigate to={"/login"} />;
+        return <Navigate to={"/auth"} />;
     }
 
     return props.children;
