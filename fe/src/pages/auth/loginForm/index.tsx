@@ -14,6 +14,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/utils/api/auth/login";
 import { errorToast } from "@/utils/toasts";
+import useAuthStore from "@/store/authstore";
+import Loader from "@/components/ui/loader";
 
 const loginSchema = z.object({
     userId: z.string().min(1, "Username/Email is required"),
@@ -21,6 +23,7 @@ const loginSchema = z.object({
 });
 
 const LoginForm = ({ onViewChange }: LoginFormProps) => {
+    const setUserData = useAuthStore((state) => state.setUserData);
     const {
         register,
         handleSubmit,
@@ -28,7 +31,7 @@ const LoginForm = ({ onViewChange }: LoginFormProps) => {
     } = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
     });
-    const { mutate: loginMutate } = useMutation({
+    const { mutate: loginMutate, isPending } = useMutation({
         mutationFn: async (data: z.infer<typeof loginSchema>) => {
             const isUsername = !data.userId.includes("@");
             const payload = isUsername
@@ -37,7 +40,7 @@ const LoginForm = ({ onViewChange }: LoginFormProps) => {
             return login(payload);
         },
         onSuccess: (data) => {
-            localStorage.setItem("user", JSON.stringify(data));
+            setUserData(data);
         },
         onError: (error: any) => {
             console.log("Login failed:", error.response.data.message);
@@ -48,62 +51,65 @@ const LoginForm = ({ onViewChange }: LoginFormProps) => {
         loginMutate(data);
     };
     return (
-        <div className="container mx-auto flex items-center justify-center h-screen">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-2xl text-center">
-                        Login
-                    </CardTitle>
-                    <CardDescription className="text-center text-sm">
-                        Login to access the task list
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit(submitHandler)}>
-                        <div className="mb-4">
-                            <Input
-                                {...register("userId")}
-                                type="text"
-                                placeholder="Username or Email"
-                            />
-                            {errors.userId && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.userId.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="mb-8">
-                            <Input
-                                {...register("password")}
-                                type="password"
-                                placeholder="Password"
-                            />
-                            {errors.password && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.password.message}
-                                </p>
-                            )}
-                        </div>
-                        <Button className="w-full font-bold" type="submit">
+        <>
+            {isPending && <Loader />}
+            <div className="container mx-auto flex items-center justify-center h-screen">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-2xl text-center">
                             Login
-                        </Button>
-                        <p className="text-sm text-center mt-2">
-                            Do not have an account,&nbsp;
-                            <Button
-                                variant={"link"}
-                                type="button"
-                                onClick={() => {
-                                    onViewChange("SIGNUP");
-                                }}
-                                className="p-0"
-                            >
-                                register
+                        </CardTitle>
+                        <CardDescription className="text-center text-sm">
+                            Login to access the task list
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleSubmit(submitHandler)}>
+                            <div className="mb-4">
+                                <Input
+                                    {...register("userId")}
+                                    type="text"
+                                    placeholder="Username or Email"
+                                />
+                                {errors.userId && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.userId.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mb-8">
+                                <Input
+                                    {...register("password")}
+                                    type="password"
+                                    placeholder="Password"
+                                />
+                                {errors.password && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.password.message}
+                                    </p>
+                                )}
+                            </div>
+                            <Button className="w-full font-bold" type="submit">
+                                Login
                             </Button>
-                        </p>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
+                            <p className="text-sm text-center mt-2">
+                                Do not have an account,&nbsp;
+                                <Button
+                                    variant={"link"}
+                                    type="button"
+                                    onClick={() => {
+                                        onViewChange("SIGNUP");
+                                    }}
+                                    className="p-0"
+                                >
+                                    register
+                                </Button>
+                            </p>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
+        </>
     );
 };
 
