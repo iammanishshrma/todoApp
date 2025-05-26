@@ -1,5 +1,10 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config({
+    path: "./.env",
+});
 
 const app = express();
 
@@ -29,6 +34,7 @@ app.use(express.static("public"));
 import userRouter from "./routes/user.routes.js";
 import todoRouter from "./routes/todo.routes.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
+import { ApiError } from "./utils/ApiError.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/todos", todoRouter);
@@ -36,6 +42,24 @@ app.use("/api/v1/health", (_, res) => {
     res.status(200).json(
         new ApiResponse(200, null, "Server is up and running")
     );
+});
+app.use((err, req, res, next) => {
+    if (err instanceof ApiError) {
+        return res.status(err.statusCode).json({
+            success: err.success,
+            message: err.message,
+            data: err.data,
+            stack:
+                process.env.NODE_ENV === "development" ? err.stack : undefined,
+        });
+    }
+
+    // Fallback for unexpected errors
+    return res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    });
 });
 
 export { app };
