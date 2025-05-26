@@ -11,6 +11,9 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { signup } from "@/utils/api/auth/signup";
+import { errorToast, successToast } from "@/utils/toasts";
 
 const userSchema = z
     .object({
@@ -34,9 +37,26 @@ const SignUpForm = ({ onViewChange }: SignUpFormProps) => {
     } = useForm<z.infer<typeof userSchema>>({
         resolver: zodResolver(userSchema),
     });
+
+    const { mutate: mutateSignup } = useMutation({
+        mutationFn: async (data: z.infer<typeof userSchema>) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { confirmPassword: _, ...payload } = data;
+            return signup(payload);
+        },
+        onSuccess: (data) => {
+            console.log("Signup successful:", data);
+            successToast("Signup successful! Please login.");
+            onViewChange("LOGIN");
+        },
+        onError: (error: any) => {
+            console.log("Login failed:", error.response.data.message);
+            errorToast(error.response.data.message);
+        },
+    });
     const submitHandler = (data: z.infer<typeof userSchema>) => {
-        console.log("Form submitted with data:", data);
-        // Handle form submission logic here
+        console.log("Submitting signup data:", data);
+        mutateSignup(data);
     };
     return (
         <div className="container mx-auto flex items-center justify-center h-screen">

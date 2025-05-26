@@ -1,6 +1,9 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
-import Auth from "@/pages/auth";
-import PrivateRoute from "./privateRoute";
+const Auth = lazy(() => import("@/pages/auth"));
+const PrivateRoute = lazy(() => import("@/routes/privateRoute"));
+const MainLayout = lazy(() => import("@/layout/main"));
+const Dashboard = lazy(() => import("@/pages/dashboard"));
 
 const router = createBrowserRouter([
     {
@@ -11,9 +14,15 @@ const router = createBrowserRouter([
         path: "/",
         element: (
             <PrivateRoute>
-                <div>Home</div>
+                <MainLayout />
             </PrivateRoute>
         ),
+        children: [
+            {
+                path: "/",
+                element: <Dashboard />,
+            },
+        ],
     },
 ]);
 export default router;
