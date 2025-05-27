@@ -19,8 +19,8 @@ const items = [
         icon: Home,
     },
     {
-        title: "Todos",
-        to: "/todos",
+        title: "Tasks",
+        to: "/tasks",
         icon: LaptopMinimalCheck,
     },
 ];
