@@ -1,5 +1,5 @@
 import logo from "@/assets/images/logo.png";
-import { Home, LaptopMinimalCheck } from "lucide-react";
+import { Home, LaptopMinimalCheck, LogOut } from "lucide-react";
 
 import {
     Sidebar,
@@ -10,22 +10,30 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router";
+import { Button } from "./ui/button";
+import useAuthStore from "@/store/authstore";
 
 // Menu items.
 const items = [
     {
         title: "Home",
-        url: "/",
+        to: "/",
         icon: Home,
     },
     {
         title: "Todos",
-        url: "/todos",
+        to: "/todos",
         icon: LaptopMinimalCheck,
+    },
+    {
+        title: "Logout",
+        icon: LogOut,
     },
 ];
 
 export function AppSidebar() {
+    const logout = useAuthStore((state) => state.logout);
+
     return (
         <Sidebar>
             <SidebarHeader className="mb-4 mt-2">
@@ -35,16 +43,34 @@ export function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarMenu>
-                    {items.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton asChild>
-                                <Link to={item.url}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    ))}
+                    {items.map((item) => {
+                        if (!item.to) {
+                            return (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="w-full justify-start !p-2"
+                                            onClick={logout}
+                                        >
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </Button>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            );
+                        }
+                        return (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton asChild>
+                                    <Link to={item.to}>
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        );
+                    })}
                 </SidebarMenu>
             </SidebarContent>
         </Sidebar>
