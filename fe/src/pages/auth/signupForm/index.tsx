@@ -59,7 +59,7 @@ const SignUpForm = ({ onViewChange }: SignUpFormProps) => {
     };
     return (
         <div className="container mx-auto flex items-center justify-center h-screen">
-            <Card>
+            <Card className="w-full max-w-[350px]">
                 <CardHeader>
                     <CardTitle className="text-2xl text-center">
                         Signup
