@@ -17,6 +17,7 @@ import { logoutUser } from "@/utils/api/auth/logout";
 import { toast } from "sonner";
 import ConfirmBox from "../confirmBox";
 import { useState } from "react";
+import Loader from "../ui/loader";
 
 // Menu items.
 const items = [
@@ -39,7 +40,7 @@ const items = [
 export function AppSidebar() {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const logout = useAuthStore((state) => state.logout);
-    const { mutate: mutateLogout } = useMutation({
+    const { mutate: mutateLogout, isPending } = useMutation({
         mutationFn: async () => logoutUser(),
         onSuccess: (message) => {
             toast.success(message);
@@ -52,6 +53,7 @@ export function AppSidebar() {
 
     return (
         <>
+            {isPending && <Loader />}
             <ConfirmBox
                 title="Confirm Logout"
                 description="Are you sure you want to logout?"
