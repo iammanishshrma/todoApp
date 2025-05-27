@@ -33,7 +33,6 @@ const Header = () => {
             logout();
         },
     });
-    console.log("Header rendered", open);
     return (
         <>
             {isPending && <Loader />}

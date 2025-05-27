@@ -55,7 +55,6 @@ const SignUpForm = ({ onViewChange }: SignUpFormProps) => {
         },
     });
     const submitHandler = (data: z.infer<typeof userSchema>) => {
-        console.log("Submitting signup data:", data);
         mutateSignup(data);
     };
     return (
