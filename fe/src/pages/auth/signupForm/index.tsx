@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { signup } from "@/utils/api/auth/signup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { signup } from "@/utils/api/auth/signup";
-import { errorToast, successToast } from "@/utils/toasts";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const userSchema = z
     .object({
@@ -45,13 +45,12 @@ const SignUpForm = ({ onViewChange }: SignUpFormProps) => {
             return signup(payload);
         },
         onSuccess: (data) => {
-            console.log("Signup successful:", data);
-            successToast("Signup successful! Please login.");
+            toast.success("Signup successful! Please login.");
             onViewChange("LOGIN");
         },
         onError: (error: any) => {
-            console.log("Login failed:", error.response.data.message);
-            errorToast(error.response.data.message);
+            const errorMessage = error.response?.data?.message || error.message;
+            toast.error(errorMessage);
         },
     });
     const submitHandler = (data: z.infer<typeof userSchema>) => {

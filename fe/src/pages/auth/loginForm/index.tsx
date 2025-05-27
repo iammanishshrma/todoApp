@@ -13,7 +13,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/utils/api/auth/login";
-import { errorToast } from "@/utils/toasts";
+import { toast } from "sonner";
+
 import useAuthStore from "@/store/authstore";
 import Loader from "@/components/ui/loader";
 
@@ -43,8 +44,8 @@ const LoginForm = ({ onViewChange }: LoginFormProps) => {
             setUserData(data);
         },
         onError: (error: any) => {
-            console.log("Login failed:", error.response.data.message);
-            errorToast(error.response.data.message);
+            const errorMessage = error.response?.data?.message || error.message;
+            toast.error(errorMessage);
         },
     });
     const submitHandler = (data: z.infer<typeof loginSchema>) => {

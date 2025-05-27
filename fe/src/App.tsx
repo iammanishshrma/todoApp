@@ -1,9 +1,9 @@
+import Loader from "@/components/ui/loader";
+import { Toaster } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastContainer } from "react-toastify";
+import { Suspense } from "react";
 import { RouterProvider } from "react-router";
 import router from "./routes";
-import { Suspense } from "react";
-import Loader from "@/components/ui/loader";
 
 const queryClient = new QueryClient();
 
@@ -13,7 +13,7 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
                 <RouterProvider router={router} />
             </QueryClientProvider>
-            <ToastContainer />
+            <Toaster />
         </Suspense>
     );
 };
