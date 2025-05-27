@@ -6,4 +6,9 @@ const apiInstance = axios.create({
     baseURL,
 });
 
+apiInstance.interceptors.response.use(
+    (response) => response,
+    (error) => Promise.reject(error)
+);
+
 export default apiInstance;
