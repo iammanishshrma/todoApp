@@ -44,7 +44,7 @@ const SignUpForm = ({ onViewChange }: SignUpFormProps) => {
             const { confirmPassword: _, ...payload } = data;
             return signup(payload);
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             toast.success("Signup successful! Please login.");
             onViewChange("LOGIN");
         },
