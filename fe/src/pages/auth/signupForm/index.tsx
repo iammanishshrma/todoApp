@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
+import Loader from "@/components/ui/loader";
 import { signup } from "@/utils/api/auth/signup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -38,7 +39,7 @@ const SignUpForm = ({ onViewChange }: SignUpFormProps) => {
         resolver: zodResolver(userSchema),
     });
 
-    const { mutate: mutateSignup } = useMutation({
+    const { mutate: mutateSignup, isPending } = useMutation({
         mutationFn: async (data: z.infer<typeof userSchema>) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { confirmPassword: _, ...payload } = data;
@@ -58,110 +59,113 @@ const SignUpForm = ({ onViewChange }: SignUpFormProps) => {
         mutateSignup(data);
     };
     return (
-        <div className="container mx-auto flex items-center justify-center h-screen">
-            <Card className="w-full max-w-[350px]">
-                <CardHeader>
-                    <CardTitle className="text-2xl text-center">
-                        Signup
-                    </CardTitle>
-                    <CardDescription className="text-center text-sm">
-                        Create an account
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit(submitHandler)}>
-                        <div className="mb-4">
-                            <Input
-                                {...register("firstName")}
-                                type="text"
-                                placeholder="First Name"
-                            />
-                            {errors.firstName && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.firstName.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="mb-4">
-                            <Input
-                                {...register("lastName")}
-                                type="text"
-                                placeholder="Last Name"
-                            />
-                            {errors.lastName && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.lastName.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="mb-4">
-                            <Input
-                                {...register("email")}
-                                type="email"
-                                placeholder="Email"
-                            />
-                            {errors.email && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.email.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="mb-4">
-                            <Input
-                                {...register("username")}
-                                type="text"
-                                placeholder="Username"
-                            />
-                            {errors.username && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.username.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="mb-4">
-                            <Input
-                                {...register("password")}
-                                type="password"
-                                placeholder="Password"
-                            />
-                            {errors.password && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.password.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="mb-8">
-                            <Input
-                                {...register("confirmPassword")}
-                                type="password"
-                                placeholder="Confirm Password"
-                            />
-                            {errors.confirmPassword && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.confirmPassword.message}
-                                </p>
-                            )}
-                        </div>
-                        <Button className="w-full font-bold" type="submit">
+        <>
+            {isPending && <Loader />}
+            <div className="container mx-auto flex items-center justify-center h-screen">
+                <Card className="w-full max-w-[350px]">
+                    <CardHeader>
+                        <CardTitle className="text-2xl text-center">
                             Signup
-                        </Button>
-                        <p className="text-sm text-center mt-2">
-                            Already have an account,&nbsp;
-                            <Button
-                                variant={"link"}
-                                type="button"
-                                onClick={() => {
-                                    onViewChange("LOGIN");
-                                }}
-                                className="p-0"
-                            >
-                                login
+                        </CardTitle>
+                        <CardDescription className="text-center text-sm">
+                            Create an account
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleSubmit(submitHandler)}>
+                            <div className="mb-4">
+                                <Input
+                                    {...register("firstName")}
+                                    type="text"
+                                    placeholder="First Name"
+                                />
+                                {errors.firstName && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.firstName.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <Input
+                                    {...register("lastName")}
+                                    type="text"
+                                    placeholder="Last Name"
+                                />
+                                {errors.lastName && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.lastName.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <Input
+                                    {...register("email")}
+                                    type="email"
+                                    placeholder="Email"
+                                />
+                                {errors.email && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.email.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <Input
+                                    {...register("username")}
+                                    type="text"
+                                    placeholder="Username"
+                                />
+                                {errors.username && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.username.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <Input
+                                    {...register("password")}
+                                    type="password"
+                                    placeholder="Password"
+                                />
+                                {errors.password && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.password.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mb-8">
+                                <Input
+                                    {...register("confirmPassword")}
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                />
+                                {errors.confirmPassword && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.confirmPassword.message}
+                                    </p>
+                                )}
+                            </div>
+                            <Button className="w-full font-bold" type="submit">
+                                Signup
                             </Button>
-                        </p>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
+                            <p className="text-sm text-center mt-2">
+                                Already have an account,&nbsp;
+                                <Button
+                                    variant={"link"}
+                                    type="button"
+                                    onClick={() => {
+                                        onViewChange("LOGIN");
+                                    }}
+                                    className="p-0"
+                                >
+                                    login
+                                </Button>
+                            </p>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
+        </>
     );
 };
 
