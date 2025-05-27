@@ -188,7 +188,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
      */
 
     //#1
-    console.log("============", req.body);
     const incomingRefreshToken = req.body.refreshToken;
     if (!incomingRefreshToken) {
         throw new ApiError(401, "Unauthorized request");
