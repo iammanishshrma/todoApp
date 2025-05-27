@@ -12,6 +12,9 @@ import {
 import { Link } from "react-router";
 import { Button } from "./ui/button";
 import useAuthStore from "@/store/authstore";
+import { useMutation } from "@tanstack/react-query";
+import { logoutUser } from "@/utils/api/auth/logout";
+import { toast } from "sonner";
 
 // Menu items.
 const items = [
@@ -33,6 +36,16 @@ const items = [
 
 export function AppSidebar() {
     const logout = useAuthStore((state) => state.logout);
+    const { mutate: mutateLogout } = useMutation({
+        mutationFn: async () => logoutUser(),
+        onSuccess: (message) => {
+            toast.success(message);
+            logout();
+        },
+        onError: () => {
+            logout();
+        },
+    });
 
     return (
         <Sidebar>
@@ -51,7 +64,7 @@ export function AppSidebar() {
                                         <Button
                                             variant="ghost"
                                             className="w-full justify-start !p-2"
-                                            onClick={logout}
+                                            onClick={() => mutateLogout()}
                                         >
                                             <item.icon />
                                             <span>{item.title}</span>
