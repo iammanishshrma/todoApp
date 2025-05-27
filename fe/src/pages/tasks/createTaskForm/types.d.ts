@@ -1,0 +1,3 @@
+type CreateTaskFromProps = {
+    onSuccess: () => void;
+};

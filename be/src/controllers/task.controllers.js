@@ -3,7 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-const addTodo = asyncHandler(async (req, res) => {
+const addTask = asyncHandler(async (req, res) => {
     const { title, description, status, priority, dueDate } = req.body;
     const todo = await Todo.create({
         userId: req.user._id,
@@ -21,7 +21,7 @@ const addTodo = asyncHandler(async (req, res) => {
     );
 });
 
-const getTodos = asyncHandler(async (req, res) => {
+const getTasks = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
@@ -46,7 +46,7 @@ const getTodos = asyncHandler(async (req, res) => {
     );
 });
 
-const updateTodo = asyncHandler(async (req, res) => {
+const updateTask = asyncHandler(async (req, res) => {
     const { title, description, status, priority, dueDate, id } = req.body;
 
     if (!id) {
@@ -71,7 +71,7 @@ const updateTodo = asyncHandler(async (req, res) => {
     );
 });
 
-const deleteTodo = asyncHandler(async (req, res) => {
+const deleteTask = asyncHandler(async (req, res) => {
     const todo = await Todo.findById(req.params.id);
 
     if (!todo) {
@@ -85,4 +85,4 @@ const deleteTodo = asyncHandler(async (req, res) => {
     );
 });
 
-export { getTodos, addTodo, updateTodo, deleteTodo };
+export { getTasks, addTask, updateTask, deleteTask };
