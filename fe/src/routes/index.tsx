@@ -4,6 +4,7 @@ const Auth = lazy(() => import("@/pages/auth"));
 const PrivateRoute = lazy(() => import("@/routes/privateRoute"));
 const MainLayout = lazy(() => import("@/layout/main"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
+const PageNotFound = lazy(() => import("@/pages/pageNotFound"));
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <Dashboard />,
+            },
+            {
+                path: "*",
+                element: <PageNotFound />,
             },
         ],
     },
