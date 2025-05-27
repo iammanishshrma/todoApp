@@ -1,13 +1,16 @@
 import { Outlet } from "react-router";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/appSidebar";
+import Header from "@/components/header";
+import Cookies from "js-cookie";
 
 const MainLayout = () => {
+    const defaultOpen = Cookies.get("sidebar_state") === "true";
     return (
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={defaultOpen}>
             <AppSidebar />
-            <main>
-                <SidebarTrigger />
+            <main className="w-full">
+                <Header />
                 <Outlet />
             </main>
         </SidebarProvider>
