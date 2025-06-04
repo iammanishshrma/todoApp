@@ -16,6 +16,7 @@ const taskSchema = z.object({
     priority: z.enum(["low", "medium", "high"], {
         required_error: "Priority is required",
     }),
+    dueDate: z.string().optional(),
 });
 
 const PRIORITY_OPTIONS = [
@@ -42,12 +43,16 @@ const CreateTaskForm = ({ onSuccess: onTaskCreated }: CreateTaskFromProps) => {
         },
     });
     const submitHandler = (data: z.infer<typeof taskSchema>) => {
+        const today = new Date();
+        const sevenDaysLater = new Date();
+        sevenDaysLater.setDate(today.getDate() + 7);
+
         const payload: CreateTaskRequest = {
             title: data.title,
             description: data.description,
             status: "pending",
             priority: data.priority,
-            dueDate: new Date().toISOString(),
+            dueDate: data.dueDate || sevenDaysLater.toISOString(),
         };
         mutateAddTask(payload);
     };
@@ -78,25 +83,37 @@ const CreateTaskForm = ({ onSuccess: onTaskCreated }: CreateTaskFromProps) => {
                         </p>
                     )}
                 </div>
-                <div className="mb-4">
-                    <Controller
-                        name="priority"
-                        control={control}
-                        render={({ field }) => (
-                            <Select
-                                options={PRIORITY_OPTIONS}
-                                placeholder="Select Priority"
-                                className="w-[calc(50%-10px)]"
-                                value={field.value || ""}
-                                onChange={field.onChange}
-                            />
+                <div className="flex justify-between gap-4 mb-4">
+                    <div className="w-[calc(50%-10px)]">
+                        <Controller
+                            name="priority"
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    options={PRIORITY_OPTIONS}
+                                    placeholder="Select Priority"
+                                    className="w-full"
+                                    value={field.value || ""}
+                                    onChange={field.onChange}
+                                />
+                            )}
+                        />
+
+                        {errors.priority && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.priority.message}
+                            </p>
                         )}
-                    />
-                    {errors.priority && (
-                        <p className="text-red-500 text-sm mt-1">
-                            {errors.priority.message}
-                        </p>
-                    )}
+                    </div>
+                    <div className="w-[calc(50%-10px)]">
+                        <Input
+                            {...register("dueDate")}
+                            min={new Date().toISOString().split("T")[0]}
+                            type="date"
+                            className="block"
+                            placeholder="Expiration Date"
+                        />
+                    </div>
                 </div>
                 <div className="flex justify-end">
                     <Button type="submit" className="font-bold">

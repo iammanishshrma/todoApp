@@ -1,7 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { getTasks } from "@/utils/api/getTasks";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import TaskLoader from "./loader";
 
@@ -18,13 +16,7 @@ const getBadgeVariant = (status: "completed" | "in-progress" | "pending") => {
     }
 };
 
-const TaskList = () => {
-    const { data: taskRes, isLoading } = useQuery({
-        queryKey: ["tasks"],
-        queryFn: getTasks,
-        refetchOnWindowFocus: false,
-    });
-    const tasks = taskRes?.tasks || [];
+const TaskList = ({ tasks, isLoading }: TaskListProps) => {
     if (isLoading) {
         return (
             <div className="flex justify-between flex-wrap gap-4">

@@ -157,3 +157,9 @@
         @apply bg-background text-foreground;
     }
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(83%) sepia(11%) saturate(569%) hue-rotate(142deg)
+        brightness(89%) contrast(87%);
+    cursor: pointer;
+}
