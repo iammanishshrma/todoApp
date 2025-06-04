@@ -85,7 +85,8 @@ const CreateTaskForm = ({ onSuccess: onTaskCreated }: CreateTaskFromProps) => {
                         render={({ field }) => (
                             <Select
                                 options={PRIORITY_OPTIONS}
-                                placeholder="Select status"
+                                placeholder="Select Priority"
+                                className="w-[calc(50%-10px)]"
                                 value={field.value || ""}
                                 onChange={field.onChange}
                             />

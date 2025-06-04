@@ -7,5 +7,6 @@ type SelectProps = {
     placeholder?: string;
     options: Option[];
     value?: string;
+    className?: string;
     onChange?: (value: string) => void;
 };
