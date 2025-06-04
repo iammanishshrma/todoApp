@@ -13,7 +13,7 @@ const router = Router();
 router.route("/").get(verifyJWT, getTasks);
 router.route("/").post(verifyJWT, addTask);
 router.route("/").put(verifyJWT, updateTask);
-router.route("/").delete(verifyJWT, deleteTask);
+router.route("/:taskId").delete(verifyJWT, deleteTask);
 router.route("/:taskId").get(verifyJWT, getTaskById);
 
 export default router;
