@@ -85,4 +85,20 @@ const deleteTask = asyncHandler(async (req, res) => {
     );
 });
 
-export { getTasks, addTask, updateTask, deleteTask };
+const getTaskById = asyncHandler(async (req, res) => {
+    const { taskId } = req.params;
+    const userId = req.user._id;
+    if (!taskId) {
+        throw new ApiError(400, "Task id is required");
+    }
+    const task = await Todo.findOne({ _id: taskId, userId });
+    if (!task) {
+        throw new ApiError(404, "Task not found");
+    }
+
+    res.status(200).json(
+        new ApiResponse(200, task, "Task fetched successfully")
+    );
+});
+
+export { getTasks, addTask, updateTask, deleteTask, getTaskById };
