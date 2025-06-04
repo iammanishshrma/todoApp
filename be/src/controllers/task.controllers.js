@@ -27,7 +27,7 @@ const getTasks = asyncHandler(async (req, res) => {
 
     const totalTodos = await Todo.countDocuments({ userId: req.user._id });
 
-    const todos = await Todo.find({ userId: req.user._id })
+    const tasks = await Todo.find({ userId: req.user._id })
         .limit(parseInt(limit))
         .skip(parseInt(skip))
         .sort({ createdAt: -1 });
@@ -39,7 +39,7 @@ const getTasks = asyncHandler(async (req, res) => {
                 totalTodos,
                 currentPage: parseInt(page),
                 totalPages: Math.ceil(totalTodos / limit),
-                todos,
+                tasks,
             },
             "Todos fetched successfully"
         )

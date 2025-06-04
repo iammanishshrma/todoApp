@@ -9,13 +9,14 @@ import {
 const Select = ({
     options,
     placeholder,
+    className,
     name,
     value,
     onChange,
 }: SelectProps) => {
     return (
         <SelectRoot name={name} value={value} onValueChange={onChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className={`w-[180px] ${className}`}>
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>

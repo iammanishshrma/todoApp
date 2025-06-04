@@ -11,7 +11,7 @@ const MainLayout = () => {
             <AppSidebar />
             <main className="w-full">
                 <Header />
-                <section className="p-2 py-4">
+                <section className="p-2 py-4 md:p-4 lg:p-6">
                     <Outlet />
                 </section>
             </main>

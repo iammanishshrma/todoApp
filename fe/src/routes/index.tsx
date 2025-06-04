@@ -6,7 +6,6 @@ const MainLayout = lazy(() => import("@/layout/main"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
 const PageNotFound = lazy(() => import("@/pages/pageNotFound"));
 const Tasks = lazy(() => import("@/pages/tasks"));
-const CreateTasks = lazy(() => import("@/pages/createTask"));
 
 const router = createBrowserRouter([
     {
@@ -31,10 +30,6 @@ const router = createBrowserRouter([
                     {
                         path: "",
                         element: <Tasks />,
-                    },
-                    {
-                        path: "create",
-                        element: <CreateTasks />,
                     },
                 ],
             },
