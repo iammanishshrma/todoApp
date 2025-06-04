@@ -22,7 +22,7 @@ const addTask = asyncHandler(async (req, res) => {
 });
 
 const getTasks = asyncHandler(async (req, res) => {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 100 } = req.query;
     const skip = (page - 1) * limit;
 
     const totalTodos = await Todo.countDocuments({ userId: req.user._id });
@@ -72,17 +72,25 @@ const updateTask = asyncHandler(async (req, res) => {
 });
 
 const deleteTask = asyncHandler(async (req, res) => {
-    const todo = await Todo.findById(req.params.id);
-
-    if (!todo) {
-        throw new ApiError(404, "Todo not found");
+    const { taskId } = req.params;
+    const userId = req.user._id;
+    if (!taskId) {
+        throw new ApiError(400, "task id is required");
     }
+    try {
+        const todo = await Todo.findOne({ _id: taskId, userId });
+        if (!todo) {
+            throw new ApiError(404, "Todo not found");
+        }
 
-    await todo.remove();
+        await todo.deleteOne();
 
-    res.status(200).json(
-        new ApiResponse(200, todo, "Todo deleted successfully")
-    );
+        res.status(200).json(
+            new ApiResponse(200, todo, "Todo deleted successfully")
+        );
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 const getTaskById = asyncHandler(async (req, res) => {
