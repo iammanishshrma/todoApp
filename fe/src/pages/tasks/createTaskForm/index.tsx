@@ -83,8 +83,8 @@ const CreateTaskForm = ({ onSuccess: onTaskCreated }: CreateTaskFromProps) => {
                         </p>
                     )}
                 </div>
-                <div className="flex justify-between gap-4 mb-4">
-                    <div className="w-[calc(50%-10px)]">
+                <div className="md:flex justify-between gap-4 mb-4">
+                    <div className="md:w-[calc(50%-10px)]">
                         <Controller
                             name="priority"
                             control={control}
@@ -92,7 +92,7 @@ const CreateTaskForm = ({ onSuccess: onTaskCreated }: CreateTaskFromProps) => {
                                 <Select
                                     options={PRIORITY_OPTIONS}
                                     placeholder="Select Priority"
-                                    className="w-full"
+                                    className="w-full mb-4 md:mb-0"
                                     value={field.value || ""}
                                     onChange={field.onChange}
                                 />
@@ -105,7 +105,7 @@ const CreateTaskForm = ({ onSuccess: onTaskCreated }: CreateTaskFromProps) => {
                             </p>
                         )}
                     </div>
-                    <div className="w-[calc(50%-10px)]">
+                    <div className="md:w-[calc(50%-10px)]">
                         <Input
                             {...register("dueDate")}
                             min={new Date().toISOString().split("T")[0]}
