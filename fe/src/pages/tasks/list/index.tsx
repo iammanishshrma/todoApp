@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router";
 import TaskLoader from "./loader";
+import moment from "moment";
 
 const getBadgeVariant = (status: "completed" | "in-progress" | "pending") => {
     switch (status) {
@@ -39,8 +40,8 @@ const TaskList = ({ tasks, isLoading }: TaskListProps) => {
                             key={task._id}
                             className="w-full md:w-[calc(50%-10px)]"
                         >
-                            <Card>
-                                <CardContent>
+                            <Card className="py-4 md:py-6">
+                                <CardContent className="px-4 md:px-6">
                                     <div className="relative">
                                         <Badge
                                             variant={getBadgeVariant(
@@ -53,20 +54,20 @@ const TaskList = ({ tasks, isLoading }: TaskListProps) => {
                                         <h2 className="text-xl font-semibold">
                                             {task.title}
                                         </h2>
-                                        <p className="text-gray-600">
+                                        <p className="text-gray-400">
                                             {task.description}
                                         </p>
-                                        <p className="text-gray-500">
+                                        <p className="text-gray-500 capitalize">
                                             Priority: {task.priority} | Due:{" "}
                                             {new Date(
                                                 task.dueDate
                                             ).toLocaleDateString()}
                                         </p>
-                                        <p className="text-gray-400 text-sm">
+                                        <p className="text-gray-500 text-sm">
                                             Created at:{" "}
-                                            {new Date(
-                                                task.createdAt
-                                            ).toLocaleDateString()}
+                                            {moment(task.createdAt).format(
+                                                "DD/MM/YYYY"
+                                            )}
                                         </p>
                                     </div>
                                 </CardContent>
