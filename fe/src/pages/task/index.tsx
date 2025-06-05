@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import PageHeader from "@/components/pageHeader";
 
 const Task = () => {
     const taskId = useParams<{ taskId: string }>().taskId ?? "";
@@ -23,7 +24,7 @@ const Task = () => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const navigate = useNavigate();
     const { data: task, isLoading } = useQuery({
-        queryKey: ["task"],
+        queryKey: ["task", taskId],
         queryFn: () => getTask(taskId),
         enabled: taskId.length > 0,
     });
@@ -35,7 +36,7 @@ const Task = () => {
             navigate("/tasks");
         },
     });
-    if (!task) {
+    if (!task && !isLoading) {
         return (
             <div className="flex items-center justify-center h-screen">
                 <h1 className="text-2xl font-bold">Task not found</h1>
@@ -44,7 +45,7 @@ const Task = () => {
     }
     return (
         <>
-            <h1 className="text-2xl font-bold mb-4">Task</h1>
+            <PageHeader title="Task Details" showBackButton />
             {isPending && <Loader />}
             {isLoading ? (
                 <Loader />
@@ -70,7 +71,7 @@ const Task = () => {
                             Priority: {task?.priority}
                         </p>
                     </CardContent>
-                    <CardFooter>
+                    <CardFooter className="flex justify-end">
                         <Button
                             variant="destructive"
                             onClick={() => setIsConfirmOpen(true)}
@@ -80,7 +81,6 @@ const Task = () => {
                     </CardFooter>
                 </Card>
             )}
-
             <ConfirmBox
                 title="Delete Task"
                 description="Are you sure you want to delete this task? This action cannot be undone."
