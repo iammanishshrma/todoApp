@@ -5,6 +5,7 @@ import CreateTaskForm from "./createTaskForm";
 import TaskList from "./list";
 import { useQuery } from "@tanstack/react-query";
 import { getTasks } from "@/utils/api/getTasks";
+import PageHeader from "@/components/pageHeader";
 
 const Tasks = () => {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
@@ -21,17 +22,19 @@ const Tasks = () => {
     const tasks = taskRes?.tasks || [];
     return (
         <>
-            <div className="flex justify-between mb-4">
-                <h1 className="text-2xl font-bold">Tasks</h1>
-                <Button
-                    type="button"
-                    onClick={() => {
-                        setShowCreateTaskModal(true);
-                    }}
-                >
-                    Create Task
-                </Button>
-            </div>
+            <PageHeader
+                title="Tasks"
+                ctaButton={
+                    <Button
+                        type="button"
+                        onClick={() => {
+                            setShowCreateTaskModal(true);
+                        }}
+                    >
+                        Create Task
+                    </Button>
+                }
+            />
             <TaskList tasks={tasks} isLoading={isLoading} />
             <CreateTaskModal
                 isOpen={showCreateTaskModal}
